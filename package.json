@@ -1,0 +1,23 @@
+{
+  "name": "goit-node",
+  "version": "2.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.6",
+    "yargs": "^16.0.3",
+    "shortid": "2.2.15"
+  },
+  "devDependencies": {
+    "mocha": "^8.1.3"
+  }
+}
