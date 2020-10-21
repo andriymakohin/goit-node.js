@@ -1,23 +1,60 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const mongoosePaginate = require('mongoose-paginate-v2');
 const { ObjectId } = require('mongoose').Types;
 
 const contactSchema = new Schema({
-  name: String,
-  email: String,
-  phone: String,
-  subscription: String,
-  password: String,
-  token: String,
+  name: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+  },
+  phone: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    select: false,
+  },
+  subscription: {
+    type: String,
+    default: 'free',
+    trim: true,
+  },
+  token: {
+    type: String,
+    trim: true,
+  },
 }, { versionKey: false });
+
+contactSchema.plugin(mongoosePaginate);
 
 class Contact {
   constructor() {
     this.contact = mongoose.model('Contact', contactSchema);
   }
 
-  listContacts = async () => {
-    return await this.contact.find();
+  listContacts = async (query, page = 1, limit = 20) => {
+    const options = {
+      page,
+      limit,
+    };
+    return await this.contact
+      .paginate(query, options)
+      .then(docs => docs)
+      .catch(err => {
+        throw err;
+      });
   };
 
   getContactById = async contactId => {
