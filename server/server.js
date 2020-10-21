@@ -32,7 +32,7 @@ const createServer = async () => {
     app.use('/auth', authRouter);
     app.use('/users', usersRouter);
 
-    app.listen(PORT , () => console.log("yeeeesss!!!! __Server was started",+ PORT));
+    app.listen(PORT , () => console.log("Server was started",+ PORT));
   } catch (e) {
     console.log(e);
     process.exit(1);
