@@ -6,6 +6,9 @@ const contactSchema = new Schema({
   name: String,
   email: String,
   phone: String,
+  subscription: String,
+  password: String,
+  token: String,
 }, { versionKey: false });
 
 class Contact {
