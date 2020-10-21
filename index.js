@@ -1,2 +1,2 @@
-const Server = require("./server/server");
-new Server().start();
+const {createServer} = require("./server/server");
+createServer()

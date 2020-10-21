@@ -1,17 +1,9 @@
-const Joi = require("joi");
-
-const {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  editContact,
-} = require("./contacts");
+const contacts =  require("./contacts");
 
 class ContactController {
   async getContacts(req, res, next) {
     try {
-      const result = await listContacts();
+      const result = await contacts.listContacts();
       res.status(200).send(result);
     } catch (error) {
       next(error);
@@ -19,11 +11,9 @@ class ContactController {
   }
 
   async getSingleContact(req, res, next) {
-    const idString = req.params.id;
-    const idNumber = parseInt(req.params.id);
-    let id = idString == idNumber ? idNumber  : idString  ;
+    const { id } = req.params;
     try {
-      const result = await getContactById(id);
+      const result = await contacts.getContactById(id);
       if (result) {
         res.status(200).send(result);
       } else {
@@ -36,19 +26,17 @@ class ContactController {
 
   async createContact(req, res, next) {
     try {
-      const result = await addContact(req.body);
+      const result = await contacts.addContact(req.body);
       res.status(201).send(result);
     } catch (error) {
       next(error);
     }
   }
   async deleteContact(req, res, next) {
-    const idString = req.params.id;
-    const idNumber = parseInt(req.params.id);
-    let id = idString == idNumber ? idNumber  : idString  ;
+    const { id } = req.params;
     try {
-      const result = await removeContact(id);
-      if (result === "ok") {
+      const result = await contacts.removeContact(id);
+      if (result) {
         res.status(200).send({ message: "contact deleted" });
       } else {
         res.status(404).send({ message: "Not found" });
@@ -59,13 +47,11 @@ class ContactController {
   }
 
   async updateContact(req, res, next) {
-    const idString = req.params.id;
-    const idNumber = parseInt(req.params.id);
-    let id = idString == idNumber ? idNumber  : idString  ;
-    const { name, email, phone } = req.body;
+    const { id } = req.params;
+    const newContactFields = req.body;
     try {
-      if (name || email || phone) {
-        const result = await editContact(id, req.body);
+      if (newContactFields) {
+        const result = await contacts.editContact(id, newContactFields);
         result
           ? res.status(200).send(result)
           : res.status(404).send({ message: "Not found" });
@@ -75,21 +61,6 @@ class ContactController {
     } catch (error) {
       next(error);
     }
-  }
-
-  contactValidate(req, res, next) {
-    const valShema = Joi.object({
-      name: Joi.string().required(),
-      email: Joi.string(),
-      phone: Joi.string(),
-    });
-
-    const { error } = valShema.validate(req.body);
-
-    if (error) {
-      return res.status(400).send({ message: "missing required name field" });
-    }
-    next();
   }
 }
 

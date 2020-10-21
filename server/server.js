@@ -1,39 +1,40 @@
-const express = require("express");
-const cors = require("cors");
-const logger = require("morgan");
-const contactsRoutes = require("../contastsComponent/contact.routers");
-require("dotenv").config();
-
+require('dotenv').config();
+const mongoose = require('mongoose');
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const contactsRouter = require('../contastsComponent/contact.routers');
 const PORT = process.env.PORT || 3000;
+const USER = process.env.USER;
+const dbName = 'db-contacts';
+const URL = `mongodb+srv://${USER}@cluster0.nbpyn.mongodb.net/${dbName}?retryWrites=true&w=majority`;
 
-module.exports = class Server {
-  constructor() {
-    this.server = null;
-  }
 
-  start() {
-    this.initServer();
-    this.initMiddleweres();
-    this.initRoutes();
-    this.initErrorHendler();
-    this.startListering();
-  }
-  initServer() {
-    this.server = express();
-  }
+const createServer = async () => {
+  try {
+    const app = express();
+    await mongoose.connect(URL, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        useCreateIndex: true
+    });
+    console.log('Mongo Database connection successful!');
 
-  initMiddleweres() {
-    this.server.use(express.json());
-    this.server.use(cors());
-    this.server.use(logger("dev"));
+    app.use(cors());
+
+    app.use(morgan('tiny'));
+
+    app.use(express.json());
+
+    app.use('/', contactsRouter);
+
+    app.listen(PORT , () => console.log("yeeeesss!!!! __Server was started",+ PORT));
+  } catch (e) {
+    console.log(e);
+    process.exit(1);
   }
-  initRoutes() {
-    this.server.use("/contacts", contactsRoutes);
-  }
-  initErrorHendler() {}
-  startListering() {
-    this.server.listen(PORT, () =>
-      console.log("yeeeesss!!!! __Server was started", PORT)
-    );
-  }
+};
+
+module.exports = {
+  createServer
 };
