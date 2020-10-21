@@ -33,7 +33,7 @@ module.exports = class Server {
   initErrorHendler() {}
   startListering() {
     this.server.listen(PORT, () =>
-      console.log("yeeeesss!!!! __Server was started", PORT)
+      console.log("Server was started", PORT)
     );
   }
 };
