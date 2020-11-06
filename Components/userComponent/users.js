@@ -6,6 +6,7 @@ const userSchema = new Schema (
   {
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    avatarUrl: String,
     subscription: {
       type: String,
       enum: ['free', 'pro', 'premium'],
@@ -69,7 +70,7 @@ class User {
       return await this.user
         .findByIdAndUpdate(id, data, { new: true })
         .then(doc => {
-          return { email: doc.email, subscription: doc.subscription };
+          return { email: doc.email, subscription: doc.subscription, avatarUrl: doc.avatarUrl };
         })
         .catch(error => {
           throw error;
