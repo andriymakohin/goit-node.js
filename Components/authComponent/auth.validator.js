@@ -11,6 +11,7 @@ const createUserSchema = Joi.object({
   subscription: Joi.any().allow('free', 'pro', 'premium').only(),
   password: Joi.string().min(8).max(24).required(),
   token: Joi.string().max(100).empty('').default(' '),
+  avatarUrl: Joi.string().max(100).empty('').default(' '),
 });
 
 const UpdateUserSchema = Joi.object({

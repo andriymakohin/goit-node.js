@@ -26,6 +26,9 @@ const createServer = async () => {
 
     app.use(morgan('tiny'));
 
+    app.use('/', express.static('public'));
+    app.use('/images', express.static('public/images'));
+
     app.use(express.json());
 
     app.use('/contact', contactsRouter);
