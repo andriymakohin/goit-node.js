@@ -3,7 +3,9 @@ const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const contactsRouter = require('../contastsComponent/contact.routers');
+const contactsRouter = require('../Components/contastsComponent/contact.routers');
+const authRouter = require('../Components/authComponent/auth.router');
+const usersRouter = require('../Components//userComponent/users.router');
 const PORT = process.env.PORT || 3000;
 const USER = process.env.USER;
 const dbName = 'db-contacts';
@@ -26,7 +28,9 @@ const createServer = async () => {
 
     app.use(express.json());
 
-    app.use('/', contactsRouter);
+    app.use('/contact', contactsRouter);
+    app.use('/auth', authRouter);
+    app.use('/users', usersRouter);
 
     app.listen(PORT , () => console.log("Server was started",+ PORT));
   } catch (e) {

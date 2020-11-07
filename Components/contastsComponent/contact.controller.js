@@ -3,8 +3,13 @@ const contacts =  require("./contacts");
 class ContactController {
   async getContacts(req, res, next) {
     try {
-      const result = await contacts.listContacts();
-      res.status(200).send(result);
+      const { sub, page, limit } = req.query;
+      const result = await contacts.listContacts(
+        sub ? { subscription: sub } : {},
+        page,
+        limit,
+      );
+      result ? res.status(200).json(result) : res.status(404).json({ message: 'Contacts not found!' });
     } catch (error) {
       next(error);
     }
