@@ -19,7 +19,7 @@ const createServer = async () => {
         useCreateIndex: true
     });
     console.log('Mongo Database connection successful!');
-
+    
     app.use(cors());
 
     app.use(morgan('tiny'));
